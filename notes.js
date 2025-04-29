@@ -21,4 +21,16 @@
  *
  * the higher the saltRounds, the more the password is encrypted
  * but the longer it takes to run the code.
+ *
+ * Creating users in seed.ts
+ * npx prisma migrate dev
+ * seed file now has errors because missing password
+ * DO NOT STORE PASSWORDS IN THE DATABASE
+ * create file auth-utils.ts in src
+ * -create fn to hash password
+ * npm run seed
+ *
+ * npx prisma studio - hashed passwords now exist in database
+ *
+ * Create auth controller
  */
