@@ -32,5 +32,14 @@
  *
  * npx prisma studio - hashed passwords now exist in database
  *
- * Create auth controller
+ * Create auth controller - auth.router.ts
+ *
+ * in postman
+ * POST to http://localhost:3000/auth/login - Body raw JSON
+ *  {
+     "email": "jon@jon.com",
+     "password": "aldfjalfjlk"
+     };
+        - "Invalid Credentials" message
+ * correct password sends the message from auth-utils.ts
  */
