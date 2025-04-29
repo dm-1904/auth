@@ -7,14 +7,14 @@ import { intParseableString as intParseableString } from "../zod/parseableString
 
 const dogController = Router();
 // TODO
-// Needs ______?
+// Needs ______? Authentication
 dogController.get("/dogs", async (req, res) => {
   const dogs = await prisma.dog.findMany();
   return res.json(dogs);
 });
 
 // TODO
-// Needs ______?
+// Needs ______? Authentication
 dogController.post(
   "/dogs",
   validateRequest({
@@ -54,7 +54,7 @@ dogController.post(
 );
 
 // TODO
-// Needs ______?
+// Needs ______? Authorization
 dogController.patch(
   "/dogs/:dogId",
   validateRequest({
@@ -101,7 +101,7 @@ dogController.patch(
 );
 
 // TODO
-// Needs _____?
+// Needs _____? Authorization
 dogController.delete(
   "/dogs/:dogId",
   validateRequest({

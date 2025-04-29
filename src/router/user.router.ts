@@ -7,7 +7,7 @@ import { prisma } from "../../prisma/db.setup";
 const userController = Router();
 
 // todo
-// Needs _____?
+// Needs _____? Authorization
 userController.patch(
   "/users/:email",
   validateRequest({
@@ -54,7 +54,7 @@ userController.patch(
 );
 
 // todo:
-// Needs _____?
+// Needs _____? Authorization
 userController.get("/users/:userEmail/dogs", async (req, res) => {
   const { userEmail } = req.params;
   const dogs = await prisma.dog.findMany({
