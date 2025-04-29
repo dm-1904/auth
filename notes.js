@@ -43,3 +43,20 @@
         - "Invalid Credentials" message
  * correct password sends the message from auth-utils.ts
  */
+
+// Auth 6 creating a JWT for the user
+
+/**
+ * npm install jsonwebtoken
+ * npm i --save-dev @types/jsonwebtoken
+ *
+ * import jwt from "jsonwebtoken"
+ *
+ * take print out of console.log and paste it into https://jwt.io/#debugger-io
+ * it will uncode it - the code has nothing to keep it secret
+ *
+ * in auth.router.ts
+ * DO NOT PUT A PASSWORD IN JWT
+ *
+ * in postman the correct email and pass returns a token.
+ */
