@@ -60,3 +60,22 @@
  *
  * in postman the correct email and pass returns a token.
  */
+
+// Auth 7: Using a JWT token on an endpoint
+/**
+ * In Postman paste the JWT token in the Authorization tab
+ * select Bearer Token as the Type.
+ * Posting to /dogs
+ * Make sure the body matches the validateRequest() in the post method
+ *
+ * In auth-utils.ts
+ * Write getDataFromAuthToken()
+ * same error at 6:24
+ * - his error was because mispelled "super-secret" in auth-utils.ts
+ * - he gets undefined after fixing the error.
+ * - adds return in try {} in getDataFromAuthToken() and his code works
+ *    - my code still prints the same error.
+ * SOLUTION - I had "" around my token. Delete them
+ *
+ * jwtInfoSchema()
+ */

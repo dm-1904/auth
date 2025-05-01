@@ -4,6 +4,7 @@ import "express-async-errors";
 import { validateRequest } from "zod-express-middleware";
 import { z } from "zod";
 import { intParseableString as intParseableString } from "../zod/parseableString.schema";
+import { getDataFromAuthToken } from "../auth-utils";
 
 const dogController = Router();
 // TODO
@@ -24,6 +25,19 @@ dogController.post(
     }),
   }),
   async (req, res) => {
+    const [, token] = req.headers.authorization?.split?.(" ") || [];
+    const myJwtData = getDataFromAuthToken(token);
+    if (!myJwtData) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    const userFromJwt = await prisma.user.findFirst({
+      where: {
+        email: myJwtData.email,
+      },
+    });
+    if (!userFromJwt) {
+      return res.status(401).json({ message: "User not found" });
+    }
     const { name, userEmail } = req.body;
     const user = await prisma.user
       .findFirstOrThrow({
