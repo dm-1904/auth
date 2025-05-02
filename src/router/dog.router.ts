@@ -21,10 +21,11 @@ dogController.post(
   validateRequest({
     body: z.object({
       name: z.string(),
-      userEmail: z.string().email(),
+      // userEmail: z.string().email(), - we can get the email from the JWT
     }),
   }),
   async (req, res) => {
+    // JWT HANDLING STUFF 👇
     const [, token] = req.headers.authorization?.split?.(" ") || [];
     const myJwtData = getDataFromAuthToken(token);
     if (!myJwtData) {
@@ -38,24 +39,28 @@ dogController.post(
     if (!userFromJwt) {
       return res.status(401).json({ message: "User not found" });
     }
-    const { name, userEmail } = req.body;
-    const user = await prisma.user
-      .findFirstOrThrow({
-        where: {
-          email: userEmail,
-        },
-      })
-      .catch(() => null);
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    // JWT HANDLING STUFF 👆
+
+    // const { name /*userEmail*/ } = req.body;
+    // const user = await prisma.user
+    //   .findFirstOrThrow({
+    //     where: {
+    //       email: userFromJwt.email, // changed from userEmail
+    //     },
+    //   })
+    //   .catch(() => null);
+
+    // if (!user) {
+    //   return res.status(404).json({ message: "User not found" });
+    // }
+    const { name } = req.body;
 
     const dog = await prisma.dog
       .create({
         data: {
           name,
-          userEmail,
+          userEmail: userFromJwt.email,
         },
       })
       .catch(() => null);

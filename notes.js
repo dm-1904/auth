@@ -79,3 +79,18 @@
  *
  * jwtInfoSchema()
  */
+
+// Auth 7.5: Using a JWT on an endpoint
+/**
+ * Refactor in the post method to use data from the JWT
+ *
+ * put in different login credentials in Postman body
+ * - printed JWT
+ * - put JWT as new Bearer Token
+ *
+ * post a new dog to /dogs
+ * - post to peter because the JWT points to his email.
+ *
+ * GET http://localhost:3000/users/peter@peter.com/dogs
+ * - prints all dogs with that userEmail
+ */
