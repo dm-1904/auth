@@ -94,3 +94,15 @@
  * GET http://localhost:3000/users/peter@peter.com/dogs
  * - prints all dogs with that userEmail
  */
+
+// Final Auth - create a piece of middleware
+/**
+ * authMiddleware()
+ * in user.router.ts- refactoring because some info is now part of the Authorization header.
+ * @14:00 about he goes over all the code with postman
+ */
+
+// Environment Variables
+/**
+ * .env
+ */

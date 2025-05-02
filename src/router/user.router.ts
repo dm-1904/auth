@@ -3,45 +3,33 @@ import { validateRequest } from "zod-express-middleware";
 import "express-async-errors";
 import { z } from "zod";
 import { prisma } from "../../prisma/db.setup";
+import { authMiddleware } from "../auth-utils";
 
 const userController = Router();
 
 // todo
 // Needs _____? Authorization
 userController.patch(
-  "/users/:email",
+  "/users",
+  authMiddleware,
   validateRequest({
-    params: z.object({ email: z.string().email() }),
     body: z.object({ email: z.string().email() }),
   }),
-  async (
-    { body: { email: bodyEmail }, params: { email: paramsEmail } },
-    res,
-    next
-  ) => {
-    if (paramsEmail === bodyEmail) {
+  async (req, res, next) => {
+    if (req.user!.email === req.body.email) {
       return res.status(400).json({
         message:
           "Please change your email address to something different than your current email",
       });
     }
-    const existingUser = await prisma.user
-      .findFirstOrThrow({
-        where: { email: paramsEmail },
-      })
-      .catch(() => null);
-
-    if (!existingUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
 
     return await prisma.user
       .update({
         where: {
-          email: paramsEmail,
+          email: req.user?.email,
         },
         data: {
-          email: bodyEmail,
+          email: req.body.email,
         },
       })
       .then((user) => res.status(201).json(user))

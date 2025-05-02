@@ -1,15 +1,15 @@
-import { Router } from "express";
+import { Request, Response, NextFunction, Router } from "express";
 import { prisma } from "../../prisma/db.setup";
 import "express-async-errors";
 import { validateRequest } from "zod-express-middleware";
 import { z } from "zod";
 import { intParseableString as intParseableString } from "../zod/parseableString.schema";
-import { getDataFromAuthToken } from "../auth-utils";
+import { getDataFromAuthToken, authMiddleware } from "../auth-utils";
 
 const dogController = Router();
 // TODO
 // Needs ______? Authentication
-dogController.get("/dogs", async (req, res) => {
+dogController.get("/dogs", authMiddleware, async (req, res) => {
   const dogs = await prisma.dog.findMany();
   return res.json(dogs);
 });
@@ -24,24 +24,8 @@ dogController.post(
       // userEmail: z.string().email(), - we can get the email from the JWT
     }),
   }),
+  authMiddleware,
   async (req, res) => {
-    // JWT HANDLING STUFF 👇
-    const [, token] = req.headers.authorization?.split?.(" ") || [];
-    const myJwtData = getDataFromAuthToken(token);
-    if (!myJwtData) {
-      return res.status(401).json({ message: "Invalid token" });
-    }
-    const userFromJwt = await prisma.user.findFirst({
-      where: {
-        email: myJwtData.email,
-      },
-    });
-    if (!userFromJwt) {
-      return res.status(401).json({ message: "User not found" });
-    }
-
-    // JWT HANDLING STUFF 👆
-
     // const { name /*userEmail*/ } = req.body;
     // const user = await prisma.user
     //   .findFirstOrThrow({
@@ -60,7 +44,7 @@ dogController.post(
       .create({
         data: {
           name,
-          userEmail: userFromJwt.email,
+          userEmail: req.user!.email,
         },
       })
       .catch(() => null);
@@ -87,6 +71,7 @@ dogController.patch(
       dogId: intParseableString,
     }),
   }),
+  authMiddleware,
   async (req, res, next) => {
     const dogId = parseInt(req.params.dogId);
 
@@ -128,6 +113,7 @@ dogController.delete(
       dogId: intParseableString,
     }),
   }),
+  authMiddleware,
   async (req, res) => {
     await prisma.dog
       .delete({
